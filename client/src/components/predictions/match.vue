@@ -5,15 +5,16 @@
       <span>{{item.match_dt|filterDate}}</span>
     </div>
     <div class="match-live" v-show="item.match_period!='FT'">
-     <div class="icon-live"></div>
-      <span>{{item.match_period+"\'"}}</span>
+      <div class="icon-live"></div>
+      <!-- <span>{{item.match_period+"\' "+item.match_period}}</span> -->
+      <span>{{item.match_period|filterMatchTime(item.match_minute)}}</span>
     </div>
     <div class="teamname">
       <span v-html="this.$options.filters.highlight(item.team_home,this.filterTeamName)"></span>
       <span v-html="this.$options.filters.highlight(item.team_away,this.filterTeamName)"></span>
     </div>
     <div class="score">
-       <span>{{item.score_home}}</span>
+      <span>{{item.score_home}}</span>
       <span>{{item.score_away}}</span>
     </div>
   </div>
@@ -21,13 +22,35 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props:{
-    item:[Object]
+  props: {
+    item: [Object]
   },
-  filters:{
-    filterDate(value){
-      var date = new Date(value.replace(/-/g,'/'));
-      return (date.getHours() +":" +(date.getMinutes() == 0 ? "00" : date.getMinutes()));
+  filters: {
+    filterDate(value) {
+      var date = new Date(value.replace(/-/g, "/"));
+      return (
+        date.getHours() +
+        ":" +
+        (date.getMinutes() == 0 ? "00" : date.getMinutes())
+      );
+    },
+    filterMatchTime(value, minutes) {
+      var time = "";
+      switch (value) {
+        case "HT":
+          time = "45' HT";
+          break;
+        case "Part2":
+          time = minutes + "' 2H";
+          break;
+        case "Part1":
+          time = minutes + "' 1H";
+          break;
+        default:
+        var matchPeriod=parseInt(value)
+          time =(matchPeriod>0 && matchPeriod<45)? value + "' 1H":value+"' 2H";
+      }
+      return time;
     }
   },
   computed: {
@@ -43,19 +66,19 @@ export default {
   line-height: 1.5;
   font-size: 14px;
 }
-.teamname{
+.teamname {
   display: grid;
   flex: 1;
 }
-.score{
+.score {
   display: grid;
   margin-right: 8px;
 }
-.match-time{
+.match-time {
   display: grid;
   padding: 0 8px;
   text-align: center;
-  span:first-child{
+  span:first-child {
     font-weight: bold;
   }
 }
@@ -67,8 +90,8 @@ export default {
   border-top-right-radius: 20px;
   margin-right: 10px;
 }
-.match-live{
-  display:flex;
+.match-live {
+  display: flex;
   align-items: center;
   padding-right: 8px;
 }

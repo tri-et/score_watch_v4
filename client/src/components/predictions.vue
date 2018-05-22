@@ -144,9 +144,7 @@ export default {
           return false;
         }
       }); // select match finished
-      var leaguepregame = Array.from(
-        new Set(this.filterHomeAwayNamePre.map(x => x.league))
-      ); //select league filter by team name
+      var leaguepregame = Array.from(new Set(this.filterHomeAwayNamePre.map(x => x.league))); //select league filter by team name
       var league = matchPreagme.filter(el => leaguepregame.includes(el.league)); //filter league and team name
       return Array.from(new Set(league.map(x => x.league)));
     },
@@ -246,18 +244,6 @@ export default {
           }
         }
       }
-      // if (league.length != 0) {
-      //   if (this.dataDetailPre.idmatch == undefined) {
-      //     this.setDataDefault(
-      //       Array.from(new Set(league.map(x => x.league))),
-      //       this.filterHomeAwayName
-      //     );
-      //     this.$store.commit("settypePrediction", {
-      //       colorheader: "#767676",
-      //       colorprediction: "#f0f0f0"
-      //     });
-      //   }
-      // }
       return Array.from(new Set(league.map(x => x.league)));
     },
     filterHomeAwayName() {

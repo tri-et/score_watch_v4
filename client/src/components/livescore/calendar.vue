@@ -85,12 +85,13 @@ export default {
     setDateCenter() {
       let outer = this.$el.querySelector(".date").clientWidth;
       let inner = this.$el.querySelector(".date").scrollWidth;
-      this.$el.querySelector(".date").scrollLeft = (inner - outer) / 2;
+      this.$el.querySelector(".date").scrollLeft = (inner - outer) / 2 + 30;
     },
     selectDate(item, index, event) {
       this.$store.commit("setcalendarLive", index);
-     this.setDateSelectedCenter(event.currentTarget.offsetLeft);
-     var oldDate =item.getFullYear() + "-" + (item.getMonth() + 1) + "-" + item.getDate();
+      this.setDateSelectedCenter(event.currentTarget.offsetLeft);
+      var oldDate =
+        item.getFullYear() + "-" + (item.getMonth() + 1) + "-" + item.getDate();
       this.$parent.getData.getLiveScore(this.$parent, oldDate);
     },
     setDateSelectedCenter(currentPositionclick) {

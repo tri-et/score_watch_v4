@@ -85,7 +85,7 @@ export default {
     setDateCenter() {
       let outer = this.$el.querySelector(".date").clientWidth;
       let inner = this.$el.querySelector(".date").scrollWidth;
-      this.$el.querySelector(".date").scrollLeft = (inner - outer) / 2;
+      this.$el.querySelector(".date").scrollLeft = (inner - outer) / 2 + 30;
     },
     selectDate(item, index, event) {
       var today = new Date();

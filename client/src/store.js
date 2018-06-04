@@ -20,7 +20,8 @@ export default new Vuex.Store({
     leagueSelected:[],
     activeSearchDesk:false,
     isShowLeagueBoxDesk:false,
-    dataDetailPre:{},
+    dataDetailPre:{
+    },
     typePrediction: {
       colorheader: '#767676',
       colorprediction: '#f0f0f0'
@@ -46,7 +47,8 @@ export default new Vuex.Store({
     isShowError: false,
     selectDatePre:'',
     loadingPredictions:false,
-    isShowClearBt:false
+    isShowClearBt:false,
+    typeMatch:'inplay'
   },
   getters: {
     menuMobile(state) {
@@ -153,6 +155,9 @@ export default new Vuex.Store({
     },
     isShowClearBt(state){
       return state.isShowClearBt
+    },
+    typeMatch(state){
+      return state.typeMatch
     }
   },
   mutations: {
@@ -260,6 +265,9 @@ export default new Vuex.Store({
     },
     setisShowClearBt(state, val) {
       state.isShowClearBt = val
+    },
+    settypeMatch(state, val) {
+      state.typeMatch = val
     }
   },
   actions: {}

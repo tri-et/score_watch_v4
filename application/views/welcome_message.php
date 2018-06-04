@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <!-- 
-    version 0.9.6
+    version 0.9.7
  -->
 <html lang="en" style="overflow:hidden;height:100%">
 <head>

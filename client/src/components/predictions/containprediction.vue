@@ -41,6 +41,7 @@ export default {
     matchSelected() {
       this.$store.commit("setdataDetailPre", this.match);
       this.$store.commit("setishowDetailPredictions", true);
+      this.$store.commit("settypeMatch",this.typematch)
       switch (this.expire) {
         case "inplay":
           this.$store.commit("settypePrediction", {

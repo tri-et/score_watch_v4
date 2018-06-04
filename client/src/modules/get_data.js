@@ -8,18 +8,18 @@ class GetData {
   }
 
   getInPlay() {
-    return Axios.get('http://localhost:8000/score_watch_v4/index.php/api/get_running/'+this.datePrediction+'/'+(new Date().getHours()),{
+    return Axios.get('index.php/api/get_running/'+this.datePrediction+'/'+(new Date().getHours()),{
       timeout:100000
     })
   }
   getPreGame() {
-    return Axios.get('http://localhost:8000/score_watch_v4/index.php/api/get_pregame/'+this.datePrediction+'/'+(new Date().getHours()),{
+    return Axios.get('index.php/api/get_pregame/'+this.datePrediction+'/'+(new Date().getHours()),{
       timeout:100000
     })
   }
   getDataInPlay(app){
     var that = this
-    Axios.get('http://localhost:8000/score_watch_v4/index.php/api/get_running/'+this.datePrediction+'/'+(new Date().getHours())).then(function(inplay){
+    Axios.get('index.php/api/get_running/'+this.datePrediction+'/'+(new Date().getHours())).then(function(inplay){
       var dataInplay = JSON.parse(inplay.data.replace(/(\)\;)|(\()/g, ""))
       app.$store.commit('setdataInplay', dataInplay)
       setTimeout(() => {
@@ -29,12 +29,12 @@ class GetData {
   }
   getDataPregame(app){
     var that = this
-    Axios.get('http://localhost:8000/score_watch_v4/index.php/api/get_pregame/'+this.datePrediction+'/'+(new Date().getHours())).then(function(pregame){
+    Axios.get('index.php/api/get_pregame/'+this.datePrediction+'/'+(new Date().getHours())).then(function(pregame){
       var dataPregame = JSON.parse(pregame.data.replace(/(\)\;)|(\()/g, ""))
       app.$store.commit('setdataPreGame', dataPregame)
       setTimeout(() => {
         that.getDataPregame(app)
-      }, 600000)
+      }, 60000)
     })
   }
   getInPlayPreGame(app,datepre) {
@@ -59,7 +59,7 @@ class GetData {
       }, 5000)
       that.timeoutPregame=setTimeout(() => {
         that.getDataPregame(app)
-      }, 600000)
+      }, 60000)
     })).catch(function(er){
       if(er.code=='ECONNABORTED'){
         app.$store.commit("setisShowError", true)

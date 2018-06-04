@@ -174,6 +174,7 @@ export default {
               colorheader: "#5bb6e7",
               colorprediction: "#C8E6F7"
             });
+            this.$store.commit("settypeMatch",'pregame')
           }
         }
       }
@@ -181,6 +182,12 @@ export default {
     },
     filterDataPregame() {
       if (this.leagueSelected.length == 0) {
+        var dataDetail = this.dataPreGame.find(
+          el => el.idmatch == this.dataDetailPre.idmatch
+        );
+        if (dataDetail != undefined) {
+          this.$store.commit("setdataDetailPre", dataDetail);
+        }
         return this.dataPreGame;
       } else {
         return this.dataPreGame.filter(el =>
@@ -190,6 +197,12 @@ export default {
     },
     filterDataInplay() {
       if (this.leagueSelected.length == 0) {
+        var dataDetail = this.dataInplay.find(
+          el => el.idmatch == this.dataDetailPre.idmatch
+        );
+        if (dataDetail != undefined) {
+          this.$store.commit("setdataDetailPre", dataDetail);
+        }
         return this.dataInplay;
       } else {
         return this.dataInplay.filter(el =>

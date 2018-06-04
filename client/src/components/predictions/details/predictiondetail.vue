@@ -9,13 +9,13 @@
       <span>{{'['+dataDetailPre.score_home+':'+dataDetailPre.score_away+']'}}</span>
     </div>
     <div>
-      <span>{{dataDetailPre.sys_hdp}}</span>
+      <span>{{dataDetailPre.detail==undefined?dataDetailPre.sys_hdp:dataDetailPre.detail[0].sys_hdp}}</span>
     </div>
     <div>
       <span>@</span>
     </div>
     <div>
-      <span>{{dataDetailPre.pick_hdp=="H"?dataDetailPre.sys_odds_home:dataDetailPre.sys_odds_away}}</span>
+      <span>{{dataDetailPre.pick_hdp=="H"?(dataDetailPre.detail==undefined?dataDetailPre.sys_odds_home:dataDetailPre.detail[0].sys_odds_home):(dataDetailPre.detail==undefined?dataDetailPre.sys_odds_away:dataDetailPre.detail[0].sys_odds_away)}}</span>
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["dataDetailPre", "typePrediction"])
+    ...mapGetters(["dataDetailPre", "typePrediction","typeMatch"])
   },
   methods: {
     handleResize() {

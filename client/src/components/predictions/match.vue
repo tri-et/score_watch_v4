@@ -7,7 +7,11 @@
     <div class="match-live" v-show="item.match_period!='FT'">
       <div class="icon-live"></div>
       <!-- <span>{{item.match_period+"\' "+item.match_period}}</span> -->
-      <span>{{item.match_period|filterMatchTime(item.match_minute)}}</span>
+      <div>
+        <span>{{item.match_minute+"'"}}</span>
+        <span>{{item.match_period|filterMatchTime(item.match_minute)}}</span>
+      </div>
+      <!-- <span>{{item.match_period|filterMatchTime(item.match_minute)}}</span> -->
     </div>
     <div class="teamname">
       <span v-html="this.$options.filters.highlight(item.team_home,this.filterTeamName)"></span>
@@ -38,17 +42,17 @@ export default {
       var time = "";
       switch (value) {
         case "HT":
-          time = "45' HT";
+          time = "HT";
           break;
         case "Part2":
-          time = minutes + "' 2H";
+          time ="2H";
           break;
         case "Part1":
-          time = minutes + "' 1H";
+          time ="1H";
           break;
         default:
-        var matchPeriod=parseInt(value)
-          time =(matchPeriod>0 && matchPeriod<45)? value + "' 1H":value+"' 2H";
+          var matchPeriod = parseInt(value);
+          time =matchPeriod > 0 && matchPeriod < 45? "1H": "2H";
       }
       return time;
     }
@@ -94,6 +98,9 @@ export default {
   display: flex;
   align-items: center;
   padding-right: 8px;
+  div:nth-of-type(2){
+    display: grid;
+  }
 }
 </style>
 

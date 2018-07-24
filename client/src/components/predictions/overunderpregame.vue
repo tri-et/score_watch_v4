@@ -3,7 +3,7 @@
     <div class="icon"><img :src="setSrcIconUnder(items,typeprediction)" width="24" height="24"></div>
     <div class="teamname">{{items.pick_ou=="O"?'Over':'Under'}}&nbsp;</div>
     <div class="odds">
-      <span>{{'['+items.score_home+':'+items.score_away+']'}}</span>
+      <!-- <span :class="{'hide_score':typeprediction!='expired'}">&nbsp;{{'['+items.score_home+':'+items.score_away+']'}}</span> -->
       <span>{{items.sys_ou}}</span>
       <span>@</span>
       <span>{{items.pick_ou=="O"?items.sys_odds_over:items.sys_odds_under}}</span>
@@ -102,6 +102,9 @@ export default {
   span:nth-child(4) {
     font-weight: 700;
   }
+}
+.hide_score{
+  display: none !important;
 }
 </style>
 

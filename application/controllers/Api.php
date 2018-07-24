@@ -162,10 +162,9 @@ class Api extends CI_Controller {
 	public function get_pregame_cron(){
 		$soap_client=new SoapClient('http://118.107.179.27:13881/Vig_WebService/Vig_WebService.asmx?WSDL');
 		$prediction=json_decode($soap_client->Prediction_Pregame()->Prediction_PregameResult,true)['Pregame'];
-		
 	
 		foreach($prediction as $item){
-			$data=$item;
+				$data=$item;
 				$sql='call insert_pregame(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 				$dateconvert=(new DateTime($data['match_dt']))->format('Y-m-d H:i:s');
 				$this->db->query($sql,array(
@@ -203,16 +202,27 @@ class Api extends CI_Controller {
 					$data['pick_hdp'],
 					$data['pick_ou']
 				));
-	};
-	if($this->timespregame<3){
-		sleep(15);
-		$this->timespregame=$this->timespregame+1;
-		$this->get_pregame_cron();
-	 }else if($this->timespregame==3){
-		$this->timespregame=0;
-	 }
-}
-
+		};
+		if($this->timespregame<3){
+			sleep(15);
+			$this->timespregame=$this->timespregame+1;
+			$this->get_pregame_cron();
+		}else if($this->timespregame==3){
+			$this->timespregame=0;
+		}
+	}
+	public function livecast($matchId=null,$ipAddress=null){
+		$soap_client=new SoapClient('http://realtime.inplay.club/livecenter/services.asmx?WSDL',array('exceptions'=>true,'trace' => 1));
+		$params =["PrivateKey" => "bSxp4QmfU2rF6QcbphAtjsxxV8MhN2jyYvh1HWYoRqxMnVCa6uH2bNDiCsfrIwSo",
+		 "UserName" => "brandon",
+		 "MatchId"=>$matchId,
+		 "Referrer"=>"INP",
+		 "IP"=>$ipAddress,
+		 "Language"=>"EN",
+		 "Company"=>"AM"];
+		$result = $soap_client->GenerateUrlByRef(array('param'=>$params))->GenerateUrlByRefResult;
+		echo($result->Url);
+	}
 	public function matchWdate($matchdt){
 		$dt=date('d',strtotime('-12 hours',strtotime($matchdt)));
 		return $dt;
@@ -229,12 +239,12 @@ class Api extends CI_Controller {
 	}
 
 	public function existsInArray($array,$match_code) {
-    foreach ($array as $item) {
-        if ($item['match_code'] == $match_code) {
-					return true;
-				}
-		}
-    return false;
+		foreach ($array as $item) {
+			if ($item['match_code'] == $match_code) {
+						return true;
+					}
+			}
+		return false;
 	}
 
 	public function removeMatch(){
@@ -271,4 +281,16 @@ class Api extends CI_Controller {
 		$dt=array(date('Y-m-d',strtotime('+1 day',strtotime($date))),date('Y-m-d',strtotime($date)),date('Y-m-d',strtotime('-1 day',strtotime($date))));
 		return $dt;
 	}
+}
+
+class wsClient{
+	public $PrivateKey;
+	public $UserName;
+	public $MatchId;
+	public $Referrer;
+	public $IP;
+	public $Language;
+	public $Home;
+	public $Away;
+	public $Company;
 }

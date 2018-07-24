@@ -22,7 +22,7 @@ import predictioninplay from "./predictioninplay";
 import predictionpregame from "./predictionpregame";
 export default {
   computed: {
-    ...mapGetters(["dataDetailPre","menuMobile"])
+    ...mapGetters(["dataDetailPre","menuMobile","ipAddress"])
   },
   props: {
     match: [Object],
@@ -39,6 +39,7 @@ export default {
   },
   methods: {
     matchSelected() {
+      this.$parent.getData.getLiveCast(this.match.rb_id!=""?this.match.rb_id:this.match.idmatch,this.ipAddress,this.$parent);
       this.$store.commit("setdataDetailPre", this.match);
       this.$store.commit("setishowDetailPredictions", true);
       this.$store.commit("settypeMatch",this.typematch)

@@ -23,7 +23,7 @@ export default {
       if (parseInt(this.items.minutes) > 70) {
         if (milliseconds > 6 * 60000) {
           // check prediction expired ; 3m + 3m remain
-          self.time = "expired[" + this.items.minutes + "']";
+          self.time = "EXP[" + this.items.minutes + "']";
         } else if (milliseconds < 3 * 60000) {
           this.countdown = 3 * 60000 - milliseconds;
           this.runcountdown();
@@ -33,7 +33,7 @@ export default {
         }
       } else {
         if (milliseconds > 13 * 60000) {
-          self.time = "expired[" + this.items.minutes + "']";
+          self.time = "EXP[" + this.items.minutes + "']";
         } else if (milliseconds < 10 * 60000) {
           this.countdown = 10 * 60000 - milliseconds;
           this.runcountdown();
@@ -65,11 +65,11 @@ export default {
         var distance = self.countdown - 1000;
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        self.time = "expired " + minutes + "m " + seconds + "s";
+        self.time = "EXP " + minutes + "m " + seconds + "s";
         self.countdown = distance;
         if (distance < 0) {
           clearInterval(x);
-          self.time = "expired[" + self.items.minutes + "']";
+          self.time = "EXP[" + self.items.minutes + "']";
           self.$parent.bg.backgroundColor='#F0F0F0'
           self.$parent.bg.color='#000'
         }

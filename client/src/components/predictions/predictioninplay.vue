@@ -1,8 +1,9 @@
 <template>
   <div class="predictioninplay" :style="bg">
     <div class="icon"><img :src="icon" width="24" height="24"></div>
-    <div class="teamname" :style="{'min-width':marquee?'70px':''}">
-      <span :class="{'marquee':marquee}">{{items.pick_hdp=="H"?items.team_home:items.team_away}}</span>
+    <div class="teamname">
+      <!-- <span :class="{'marquee':marquee}">{{items.pick_hdp=="H"?items.team_home:items.team_away}}</span> -->
+      <span>{{items.pick_hdp=="H"?items.team_home:items.team_away}}</span>
     </div>
     <resize-observer @notify="handleResize" />
     <div class="odds">
@@ -15,7 +16,7 @@
       <countdown :items="items"></countdown>
     </div>
     <div class="expired" v-show="typeinplay=='expired'">
-      <span>{{'expired ['+items.minutes+'\']'}}</span>
+      <span>{{'MIN '+items.minutes+'\' - '+calculatorExpired(items.minutes)+'\''}}</span>
     </div>
   </div>
 </template>
@@ -54,6 +55,15 @@ export default {
       } else {
         this.marquee = false;
       }
+    },
+    calculatorExpired(minutes_prdiction) {
+      var time = parseInt(minutes_prdiction);
+      if (time < 70) {
+        time = time + 10;
+      } else {
+        time = time + 3;
+      }
+      return time;
     }
   },
   created() {
@@ -134,11 +144,12 @@ export default {
   font-weight: 700;
   font-size: 14px;
   position: relative;
-  white-space: nowrap;
+  // white-space: nowrap;
   overflow: hidden;
   height: 40px;
   display: flex;
   align-items: center;
+  max-width: 105px;
 }
 .odds {
   display: flex;
@@ -150,6 +161,7 @@ export default {
 .expired {
   padding-right: 5px;
   font-weight: 600;
+  font-size: 12px;
 }
 .marquee {
   position: absolute;

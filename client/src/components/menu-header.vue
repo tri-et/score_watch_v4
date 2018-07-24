@@ -5,7 +5,9 @@
         <nav>
           <ul class="desktop" :class="{'showMenuMobile':menuMobile}">
             <li>
-              <div class="logo"></div>
+              <div class="logo">
+                <img src="../assets/images/logo.jpg" width="48" height="48" alt="">
+              </div>
             </li>
             <router-link to="/" tag="li">
               <a>
@@ -50,7 +52,9 @@
           <!--start menu for mobile -->
           <ul class="mobile" :class="{'showMenuMobile':!menuMobile}">
             <li>
-              <div class="logo"></div>
+              <div class="logo">
+                <img src="../assets/images/logo.jpg" width="48" height="48" alt="">
+              </div>
             </li>
             <li>
               <div class="group-menu">
@@ -132,7 +136,7 @@ export default {
       this.$store.commit("setactiveSearchDesk", !this.activeSearchDesk);
     },
     openFilterDesk() {
-      this.$store.commit('setisShowLeagueBoxDesk',!this.isShowLeagueBoxDesk)
+      this.$store.commit("setisShowLeagueBoxDesk", !this.isShowLeagueBoxDesk);
     },
     openSearch() {
       if (this.countLeague == 0) {
@@ -140,7 +144,7 @@ export default {
       } else {
         this.$store.commit("setcountLeague", 0);
         this.$parent.$refs.boxSearch.checkLeague = []; //reset league selected
-        this.$parent.$refs.boxSearch.checkLeague = []
+        this.$parent.$refs.boxSearch.checkLeague = [];
       }
     },
     openSideBar() {
@@ -163,8 +167,8 @@ export default {
         this.$store.commit("setmenuMobile", true);
       }
     },
-    updateTeamName(e){
-      this.$store.commit('setfilterTeamName', e.target.value)
+    updateTeamName(e) {
+      this.$store.commit("setfilterTeamName", e.target.value);
     }
   },
   mounted() {
@@ -210,7 +214,7 @@ export default {
       background-color: #575757;
       padding-left: 10px;
       width: 210px;
-      color:#fff;
+      color: #fff;
     }
   }
 }
@@ -326,6 +330,9 @@ export default {
   border-radius: 8px;
   background: #000;
   margin-left: 8px;
+  img {
+    border-radius: 8px;
+  }
 }
 .search {
   height: 48px;

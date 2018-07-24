@@ -18,8 +18,8 @@ export default {
 </script>
 <style scoped>
 .odd{
-  /* background-color: #5bb6e7; */
-  height: 84px;
+  /* background-color: #5bb6e7; 
+  height: 84px;*/
   display:flex;
   align-items: flex-end;
 }

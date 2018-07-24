@@ -48,7 +48,9 @@ export default new Vuex.Store({
     selectDatePre:'',
     loadingPredictions:false,
     isShowClearBt:false,
-    typeMatch:'inplay'
+    typeMatch:'inplay',
+    ipAddress:'127.0.0.1',
+    linkLiveCast:'http://realtime.inplay.club/livecenter/match.html?k=c348f372475b46c695488750d49c354f&us=brandon#9999999'
   },
   getters: {
     menuMobile(state) {
@@ -158,6 +160,12 @@ export default new Vuex.Store({
     },
     typeMatch(state){
       return state.typeMatch
+    },
+    ipAddress(state){
+      return state.ipAddress
+    },
+    linkLiveCast(state){
+      return state.linkLiveCast
     }
   },
   mutations: {
@@ -268,6 +276,12 @@ export default new Vuex.Store({
     },
     settypeMatch(state, val) {
       state.typeMatch = val
+    },
+    setipAddress(state, val) {
+      state.ipAddress = val
+    },
+    setlinkLiveCast(state, val) {
+      state.linkLiveCast = val
     }
   },
   actions: {}

@@ -3,8 +3,8 @@
     <div class="icon"><img :src="icon" width="24" height="24"></div>
     <div class="teamname">{{items.pick_hdp=="H"?items.team_home:items.team_away}}</div>
     <div class="odds">
-      <span>&nbsp;{{'['+items.score_home+':'+items.score_away+']'}}</span>
-      <span>{{items.sys_hdp}}</span>
+      <!-- <span :class="{'hide_score':typepregame!='expired'}">&nbsp;{{'['+items.score_home+':'+items.score_away+']'}}</span> -->
+      <span>&nbsp;{{items.sys_hdp}}</span>
       <span>@</span>
       <span>{{items.pick_hdp=="H"?items.sys_odds_home:items.sys_odds_away}}</span>
     </div>
@@ -80,6 +80,9 @@ export default {
   position: relative;
   white-space: nowrap;
   overflow: hidden;
+}
+.hide_score{
+  display: none !important;
 }
 </style>
 

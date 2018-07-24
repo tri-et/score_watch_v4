@@ -8,6 +8,12 @@
       <span>@</span>
       <span>{{items.pick_ou=="O"?items.sys_odds_over:items.sys_odds_under}}</span>
     </div>
+    <div class="timer expired" v-show="typeprediction!='expired'">
+      <countdown :items="items"></countdown>
+    </div>
+    <div v-show="typeprediction=='expired'" class="timeexpired">
+      <span>{{'MIN '+items.minutes+'\' - '+calculatorExpired(items.minutes)+'\''}}</span>
+    </div>
   </div>
 </template>
 <script>
@@ -15,11 +21,15 @@ import pred_gold from "../../assets/images/pred_gold.svg";
 import lose_icon from "../../assets/images/lose_icon@1x.svg";
 import win_icon from "../../assets/images/win_icon@1x.svg";
 import draw_icon from "../../assets/images/draw_icon@1x.svg";
+import countdown from "./countdown";
 export default {
   props: {
     items: [Object],
     typeprediction: [String],
-    srore:[Object]
+    srore: [Object]
+  },
+  components: {
+    countdown
   },
   data() {
     return {
@@ -34,7 +44,8 @@ export default {
     setSrcIconUnder(data, typepre) {
       let url = "";
       let ou = parseFloat(data.sys_ou);
-      let finalsocre = parseInt(this.srore.score_home) + parseInt(this.srore.score_away);
+      let finalsocre =
+        parseInt(this.srore.score_home) + parseInt(this.srore.score_away);
       if (typepre == "expired") {
         switch (data.pick_ou) {
           case "O":
@@ -64,6 +75,15 @@ export default {
         url = pred_gold;
       }
       return url;
+    },
+    calculatorExpired(minutes_prdiction) {
+      var time = parseInt(minutes_prdiction);
+      if (time < 70) {
+        time = time + 10;
+      } else {
+        time = time + 3;
+      }
+      return time;
     }
   },
   created() {
@@ -103,6 +123,14 @@ export default {
   span:nth-child(4) {
     font-weight: 700;
   }
+}
+.timeexpired {
+  padding-right: 5px;
+}
+.expired {
+  padding-right: 5px;
+  font-weight: 600;
+  font-size: 12px;
 }
 </style>
 

@@ -1,25 +1,47 @@
 import Axios from 'axios';
+import os from 'os';
 class GetData {
   constructor() {
     this.datePrediction = "";
-    this.dateLiveScore="";
-    this.timeoutInPlay=null;
-    this.timeoutPregame=null;
+    this.dateLiveScore = "";
+    this.timeoutInPlay = null;
+    this.timeoutPregame = null;
+    this.url = "http://localhost:8000/score_watch_v4/";
+    //this.url = "";
   }
 
+  getIpAddress(app) {
+    window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;//compatibility for Firefox and chrome
+    var pc = new RTCPeerConnection({ iceServers: [] }), noop = function () { };
+    pc.createDataChannel('');//create a bogus data channel
+    pc.createOffer(pc.setLocalDescription.bind(pc), noop);// create offer and set local description
+    pc.onicecandidate = function (ice) {
+      if (ice && ice.candidate && ice.candidate.candidate) {
+        var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+        app.$store.commit('setipAddress', myIP);
+        pc.onicecandidate = noop;
+      }
+    }
+  }
+  getLiveCast(match_id, ip_address, app) {
+    app.$store.commit('setlinkLiveCast', 'http://realtime.inplay.club/livecenter/match.html?k=c348f372475b46c695488750d49c354f&us=brandon#9999999')
+    Axios.get(this.url + 'index.php/api/livecast/' + match_id + '/' + ip_address).then(function (livecast) {
+      app.$store.commit('setlinkLiveCast', livecast.data)
+    })
+  }
   getInPlay() {
-    return Axios.get('index.php/api/get_running/'+this.datePrediction+'/'+(new Date().getHours()),{
-      timeout:100000
+    return Axios.get(this.url + 'index.php/api/get_running/' + this.datePrediction + '/' + (new Date().getHours()), {
+      timeout: 100000
     })
   }
   getPreGame() {
-    return Axios.get('index.php/api/get_pregame/'+this.datePrediction+'/'+(new Date().getHours()),{
-      timeout:100000
+    return Axios.get(this.url + 'index.php/api/get_pregame/' + this.datePrediction + '/' + (new Date().getHours()), {
+      timeout: 100000
     })
   }
-  getDataInPlay(app){
+  getDataInPlay(app) {
     var that = this
-    Axios.get('index.php/api/get_running/'+this.datePrediction+'/'+(new Date().getHours())).then(function(inplay){
+    Axios.get(this.url + 'index.php/api/get_running/' + this.datePrediction + '/' + (new Date().getHours())).then(function (inplay) {
       var dataInplay = JSON.parse(inplay.data.replace(/(\)\;)|(\()/g, ""))
       app.$store.commit('setdataInplay', dataInplay)
       setTimeout(() => {
@@ -27,9 +49,9 @@ class GetData {
       }, 5000)
     })
   }
-  getDataPregame(app){
+  getDataPregame(app) {
     var that = this
-    Axios.get('index.php/api/get_pregame/'+this.datePrediction+'/'+(new Date().getHours())).then(function(pregame){
+    Axios.get(this.url + 'index.php/api/get_pregame/' + this.datePrediction + '/' + (new Date().getHours())).then(function (pregame) {
       var dataPregame = JSON.parse(pregame.data.replace(/(\)\;)|(\()/g, ""))
       app.$store.commit('setdataPreGame', dataPregame)
       setTimeout(() => {
@@ -37,9 +59,9 @@ class GetData {
       }, 60000)
     })
   }
-  getInPlayPreGame(app,datepre) {
+  getInPlayPreGame(app, datepre) {
     var that = this
-    this.datePrediction=datepre
+    this.datePrediction = datepre
     clearTimeout(this.timeoutInPlay)
     clearTimeout(this.timeoutPregame)
     Axios.all([this.getInPlay(), this.getPreGame()]).then(Axios.spread(function (inplay, pregame) {
@@ -53,15 +75,15 @@ class GetData {
       app.$store.commit('setallLeagueDesk', allLeague)
       app.$store.commit('setdataPreGame', dataPregame)
       app.$store.commit('setdataInplay', dataInplay)
-      app.$store.commit('setloadingPredictions',false)
-      that.timeoutInPlay=setTimeout(() => {
+      app.$store.commit('setloadingPredictions', false)
+      that.timeoutInPlay = setTimeout(() => {
         that.getDataInPlay(app)
       }, 5000)
-      that.timeoutPregame=setTimeout(() => {
+      that.timeoutPregame = setTimeout(() => {
         that.getDataPregame(app)
       }, 60000)
-    })).catch(function(er){
-      if(er.code=='ECONNABORTED'){
+    })).catch(function (er) {
+      if (er.code == 'ECONNABORTED') {
         app.$store.commit("setisShowError", true)
       }
     })
@@ -82,12 +104,12 @@ class GetData {
     return Axios.get('http://www.hasilskor.com/API/JSON.aspx?date=' + this.dateLiveScore + '&sport=soccer&s=26PDpiffaaBbGrBdfgnrK2pknndskc1f3IMeKLW6PqdprBMHMqSTQ7gcmlcx7jZMxmyeTTBXRqwDh5p044MJHrf')
   }
 
-  getLiveScore(app,datelive) {
+  getLiveScore(app, datelive) {
     var that = this
-    this.dateLiveScore=datelive
+    this.dateLiveScore = datelive
     var currentTime = new Date()
     var today = currentTime.getFullYear() + '-' + (currentTime.getMonth() + 1) + '-' + currentTime.getDate()
-    Axios.all([this.getTimeLineData(), this.getStatsData(),datelive==today?this.getMatchLiveScore():this.getMatchLiveScoreByDate(this.dateLiveScore)]).then(Axios.spread(function (timeline, stats, {data}) {
+    Axios.all([this.getTimeLineData(), this.getStatsData(), datelive == today ? this.getMatchLiveScore() : this.getMatchLiveScoreByDate(this.dateLiveScore)]).then(Axios.spread(function (timeline, stats, { data }) {
       var leftData = []
       var rightData = []
       var allLeagueLiveScore = Array.from(new Set(data.r.map(x => x[5])))

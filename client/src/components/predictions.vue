@@ -144,7 +144,9 @@ export default {
           return false;
         }
       }); // select match finished
-      var leaguepregame = Array.from(new Set(this.filterHomeAwayNamePre.map(x => x.league))); //select league filter by team name
+      var leaguepregame = Array.from(
+        new Set(this.filterHomeAwayNamePre.map(x => x.league))
+      ); //select league filter by team name
       var league = matchPreagme.filter(el => leaguepregame.includes(el.league)); //filter league and team name
       return Array.from(new Set(league.map(x => x.league)));
     },
@@ -174,7 +176,7 @@ export default {
               colorheader: "#5bb6e7",
               colorprediction: "#C8E6F7"
             });
-            this.$store.commit("settypeMatch",'pregame')
+            this.$store.commit("settypeMatch", "pregame");
           }
         }
       }
@@ -350,6 +352,7 @@ export default {
       "-" +
       today.getDate();
     getdata.getInPlayPreGame(this, dateselected);
+    getdata.getIpAddress(this);
   }
 };
 </script>

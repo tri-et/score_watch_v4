@@ -12,7 +12,7 @@
               <div class="nomatch" v-show="filterLeagueInPlay.length==0">No matches to show</div>
               <template v-for="(league,index) in filterLeagueInPlay">
                 <leagueprediction :leaguename="league" :key="index"></leagueprediction>
-                <containprediction expire="inplay" typematch="inplay" :match="match" v-for="(match,index) in filterHomeAwayName" :key="index+match.idmatch" v-if="league==match.league && match.match_period!='FT'"></containprediction>
+                <containprediction expire="inplay" typematch="inplay" :match="match" v-for="(match,index) in filterHomeAwayName" :key="index+match.idmatch" v-if="league==match.league && match.match_period!='FT' && match.isExpired==false"></containprediction>
               </template>
             </div>
             <div class="containprediction">
@@ -22,7 +22,7 @@
               <div class="nomatch" v-show="filterLeagueInPlayExp.length==0">No matches to show</div>
               <template v-for="(league,index) in filterLeagueInPlayExp">
                 <leagueprediction :leaguename="league" :key="index"></leagueprediction>
-                <containprediction expire="expired" typematch="inplay" :match="match" v-for="(match,index) in filterHomeAwayName" :key="index+match.idmatch" v-if="league==match.league && match.match_period=='FT'"></containprediction>
+                <containprediction expire="expired" typematch="inplay" :match="match" v-for="(match,index) in filterHomeAwayName" :key="index+match.idmatch" v-if="league==match.league && (match.match_period=='FT' || match.isExpired==true)"></containprediction>
               </template>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default {
     },
     filterLeagueInPlay() {
       var matchInPlay = this.filterHomeAwayName.filter(
-        el => el.match_period != "FT"
+        el => el.match_period != "FT" && el.isExpired==false
       ); // select match living
       var leaguepregame = Array.from(
         new Set(this.filterDataInplay.map(x => x.league))
@@ -235,8 +235,9 @@ export default {
       return Array.from(new Set(league.map(x => x.league)));
     },
     filterLeagueInPlayExp() {
+      var self = this;
       var matchPreagme = this.filterHomeAwayName.filter(
-        el => el.match_period == "FT"
+        el => el.match_period == "FT" || el.isExpired==true
       ); // select match finished
       var leagueinplay = Array.from(
         new Set(this.filterDataInplay.map(x => x.league))
@@ -315,6 +316,27 @@ export default {
     }
   },
   methods: {
+    getExp(el) {
+      var isExpired = false;
+      var prediction = el.detail[0];
+      var minutes = parseInt(prediction.minutes);
+      var predictionTime = new Date(prediction.time).getTime();
+      var currentTime = new Date().getTime();
+      if (minutes < 70) {
+        if (currentTime - predictionTime > 13 * 60000) {
+          isExpired = true;
+        }
+      } else {
+        if (currentTime - predictionTime > 6 * 60000) {
+          isExpired = true;
+        }
+      }
+      if (el.match_period == "FT" && isExpired) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     opendetail() {
       this.$store.commit("setishowDetailPredictions", true);
     },

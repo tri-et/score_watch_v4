@@ -1,10 +1,10 @@
 <template>
   <div class="match">
-    <div class="match-time" v-show="item.match_period=='FT'">
+    <div class="match-time" v-show="item.match_period=='FT'|| item.isExpired">
       <span>FT</span>
       <span>{{item.match_dt|filterDate}}</span>
     </div>
-    <div class="match-live" v-show="item.match_period!='FT'">
+    <div class="match-live" v-show="item.match_period!='FT'&& !item.isExpired">
       <div class="icon-live"></div>
       <!-- <span>{{item.match_period+"\' "+item.match_period}}</span> -->
       <div>
@@ -45,14 +45,14 @@ export default {
           time = "HT";
           break;
         case "Part2":
-          time ="2H";
+          time = "2H";
           break;
         case "Part1":
-          time ="1H";
+          time = "1H";
           break;
         default:
           var matchPeriod = parseInt(value);
-          time =matchPeriod > 0 && matchPeriod < 45? "1H": "2H";
+          time = matchPeriod > 0 && matchPeriod < 45 ? "1H" : "2H";
       }
       return time;
     }
@@ -98,7 +98,7 @@ export default {
   display: flex;
   align-items: center;
   padding-right: 8px;
-  div:nth-of-type(2){
+  div:nth-of-type(2) {
     display: grid;
   }
 }
